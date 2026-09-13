@@ -16,7 +16,7 @@ class MockStorage {
   }
 
   init() {
-    if (typeof window === 'undefined') return;
+    if (typeof localStorage === 'undefined') return;
     
     if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES)) {
       localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
