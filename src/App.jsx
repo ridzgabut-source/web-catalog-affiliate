@@ -1,22 +1,50 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+
+// Layouts
+import PublicLayout from './components/layout/PublicLayout.jsx';
+import AdminLayout from './components/layout/AdminLayout.jsx';
+
+// Public Pages
+import HomePage from './pages/public/HomePage.jsx';
+import CatalogPage from './pages/public/CatalogPage.jsx';
+import ProductDetailPage from './pages/public/ProductDetailPage.jsx';
+import NotFoundPage from './pages/public/NotFoundPage.jsx';
+
+// Admin Pages
+import AdminLoginPage from './pages/admin/AdminLoginPage.jsx';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage.jsx';
+import AdminProductsPage from './pages/admin/AdminProductsPage.jsx';
+import AdminCategoriesPage from './pages/admin/AdminCategoriesPage.jsx';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-6 text-center">
-      <div className="max-w-md bg-white p-8 rounded-panel shadow-elevation-2 border border-slate-200">
-        <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-          <span className="material-symbols-outlined text-2xl">storefront</span>
-        </div>
-        <h1 className="text-2xl font-bold font-headline text-on-surface mb-2">
-          KoleksiKita
-        </h1>
-        <p className="text-on-surface-variant text-sm mb-4">
-          Frontend Website Catalog Affiliate dengan Design System Google Stitch.
-        </p>
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
-          <span>Design Tokens Ready</span>
-        </div>
-      </div>
-    </div>
+    <ToastProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Customer Routes */}
+            <Route path="/" element={<PublicLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path="catalog" element={<CatalogPage />} />
+              <Route path="product/:slug" element={<ProductDetailPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+
+            {/* Admin Authentication */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+
+            {/* Protected Admin Routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="products" element={<AdminProductsPage />} />
+              <Route path="categories" element={<AdminCategoriesPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ToastProvider>
   );
 }
