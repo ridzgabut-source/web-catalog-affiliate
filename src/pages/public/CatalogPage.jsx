@@ -10,6 +10,7 @@ import Pagination from '../../components/catalog/Pagination.jsx';
 import { ProductCardSkeleton } from '../../components/common/Skeleton.jsx';
 import EmptyState from '../../components/common/EmptyState.jsx';
 import Button from '../../components/common/Button.jsx';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta.js';
 
 export default function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,6 +21,18 @@ export default function CatalogPage() {
   const sortParam = searchParams.get('sort') || 'newest';
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const featuredParam = searchParams.get('featured') === 'true';
+
+  // Dynamic document meta based on active filter
+  const currentCategoryName = categories.find((c) => c.slug === categoryParam || c.id === categoryParam)?.name;
+  useDocumentMeta({
+    title: currentCategoryName
+      ? `Katalog ${currentCategoryName} | KoleksiKita`
+      : searchParam
+      ? `Pencarian "${searchParam}" | KoleksiKita`
+      : 'Katalog Produk Pilihan | KoleksiKita',
+    description: 'Jelajahi seluruh katalog produk pilihan, filter berdasarkan kategori dan harga terbaik dari Shopee & Tokopedia.',
+    image: '/images/og/og-koleksikita.webp',
+  });
 
   // State
   const [products, setProducts] = useState([]);

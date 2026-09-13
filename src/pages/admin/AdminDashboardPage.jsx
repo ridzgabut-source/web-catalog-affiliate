@@ -160,7 +160,8 @@ export default function AdminDashboardPage() {
                       <div className="flex items-center gap-3">
                         <img
                           src={p.image}
-                          alt={p.name}
+                          alt={`Thumbnail ${p.name}`}
+                          title={p.name}
                           className="w-10 h-10 rounded-xl object-cover bg-slate-100 shrink-0"
                         />
                         <div className="min-w-0">

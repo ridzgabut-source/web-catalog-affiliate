@@ -55,10 +55,11 @@ export default function ProductTable({
                     <div className="flex items-center gap-3.5">
                       <img
                         src={p.image}
-                        alt={p.name}
+                        alt={`Thumbnail ${p.name}`}
+                        title={p.name}
                         className="w-12 h-12 rounded-xl object-cover bg-slate-100 shrink-0 border border-slate-200"
                         onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=150&q=80';
+                          e.target.src = '/images/og/og-koleksikita.webp';
                         }}
                       />
                       <div className="min-w-0 max-w-xs">
@@ -144,8 +145,12 @@ export default function ProductTable({
             <div className="flex items-start gap-3">
               <img
                 src={p.image}
-                alt={p.name}
+                alt={`Thumbnail ${p.name}`}
+                title={p.name}
                 className="w-14 h-14 rounded-xl object-cover bg-slate-100 shrink-0 border border-slate-200"
+                onError={(e) => {
+                  e.target.src = '/images/og/og-koleksikita.webp';
+                }}
               />
               <div className="flex-1 min-w-0">
                 <span className="text-[10px] font-bold uppercase text-primary tracking-wider">

@@ -256,7 +256,8 @@ export default function ProductFormModal({
             <div className="mt-3 flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200">
               <img
                 src={formData.image}
-                alt="Preview produk"
+                alt={formData.name ? `Preview ${formData.name}` : "Preview gambar produk"}
+                title={formData.name || "Preview gambar produk"}
                 className="w-16 h-16 rounded-xl object-cover bg-white border border-slate-200 shrink-0"
                 onError={(e) => {
                   e.target.style.display = 'none';

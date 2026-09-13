@@ -1,8 +1,8 @@
 import { INITIAL_CATEGORIES, INITIAL_PRODUCTS, DEMO_ADMIN } from './mockData.js';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'kk_products_v1',
-  CATEGORIES: 'kk_categories_v1',
+  PRODUCTS: 'kk_products_v2',
+  CATEGORIES: 'kk_categories_v2',
   AUTH_TOKEN: 'kk_auth_token_v1',
   AUTH_USER: 'kk_auth_user_v1',
 };

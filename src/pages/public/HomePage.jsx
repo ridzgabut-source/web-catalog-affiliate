@@ -6,8 +6,15 @@ import ProductCard from '../../components/catalog/ProductCard.jsx';
 import CategoryPills from '../../components/catalog/CategoryPills.jsx';
 import { ProductCardSkeleton } from '../../components/common/Skeleton.jsx';
 import Button from '../../components/common/Button.jsx';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta.js';
 
 export default function HomePage() {
+  useDocumentMeta({
+    title: 'KoleksiKita - Kurasi Produk Pilihan Terbaik',
+    description: 'Temukan rekomendasi produk pilihan terbaik dengan ulasan terpercaya dan tautan resmi Shopee & Tokopedia.',
+    image: '/images/og/og-koleksikita.webp',
+  });
+
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);

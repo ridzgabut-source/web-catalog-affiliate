@@ -1,8 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/common/Button.jsx';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta.js';
 
 export default function NotFoundPage() {
+  useDocumentMeta({
+    title: '404 Halaman Tidak Ditemukan | KoleksiKita',
+    description: 'Halaman yang Anda cari tidak dapat ditemukan di KoleksiKita.',
+  });
+
   return (
     <div className="max-w-md mx-auto px-4 py-24 text-center space-y-5">
       <div className="w-20 h-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mx-auto">

@@ -5,6 +5,7 @@ import Badge from '../../components/common/Badge.jsx';
 import Button from '../../components/common/Button.jsx';
 import ProductCard, { formatRupiah } from '../../components/catalog/ProductCard.jsx';
 import StickyAffiliateBar from '../../components/catalog/StickyAffiliateBar.jsx';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta.js';
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
@@ -14,6 +15,13 @@ export default function ProductDetailPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useDocumentMeta({
+    title: product ? `${product.name} | KoleksiKita` : 'Detail Produk | KoleksiKita',
+    description: product ? product.description : 'Temukan ulasan dan rekomendasi harga terbaik produk terkurasi di KoleksiKita.',
+    image: product?.image || '/images/og/og-koleksikita.webp',
+    type: 'product',
+  });
 
   useEffect(() => {
     async function loadProduct() {
@@ -130,7 +138,8 @@ export default function ProductDetailPage() {
           <div className="relative w-full aspect-square bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-elevation-1">
             <img
               src={product.image}
-              alt={product.name}
+              alt={`Foto produk ${product.name}`}
+              title={product.name}
               className="w-full h-full object-cover object-center"
             />
             <div className="absolute top-4 left-4 flex flex-wrap gap-2">
