@@ -15,18 +15,43 @@ export default function ProductCard({ product }) {
     ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
     : 0;
 
-  // Determine button label and icon for marketplace
-  const marketplaceLabel = product.marketplace_type === 'shopee'
-    ? 'Shopee'
-    : product.marketplace_type === 'tokopedia'
-    ? 'Tokopedia'
-    : 'Marketplace';
+  // Determine button variants based on text heuristics
+  const getVariant = (text) => {
+    const t = text ? text.toLowerCase() : '';
+    if (t.includes('shopee')) return 'shopee';
+    if (t.includes('tokopedia')) return 'tokopedia';
+    return 'primary';
+  };
 
-  const marketplaceVariant = product.marketplace_type === 'shopee'
-    ? 'shopee'
-    : product.marketplace_type === 'tokopedia'
-    ? 'tokopedia'
-    : 'primary';
+  const btn1Variant = getVariant(product.button1_text);
+  const btn2Variant = getVariant(product.button2_text);
+  const btn3Variant = getVariant(product.button3_text);
+
+  const availableButtons = [];
+  if (product.button1_url) availableButtons.push({ url: product.button1_url, text: product.button1_text, price: product.button1_price, variant: btn1Variant });
+  if (product.button2_url) availableButtons.push({ url: product.button2_url, text: product.button2_text, price: product.button2_price, variant: btn2Variant });
+  if (product.button3_url) availableButtons.push({ url: product.button3_url, text: product.button3_text, price: product.button3_price, variant: btn3Variant });
+
+  const ButtonRenderer = ({ btn }) => (
+    <div className="flex flex-col justify-end gap-1">
+      {btn.price ? (
+        <span className="text-[10px] font-bold text-slate-500 text-center truncate">{formatRupiah(btn.price)}</span>
+      ) : <div className="h-[15px]" />}
+      <Button
+        as="a"
+        href={btn.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        variant={btn.variant}
+        size="sm"
+        className="w-full text-center"
+        icon="open_in_new"
+        iconPosition="right"
+      >
+        <span className="truncate">{btn.text || 'Beli'}</span>
+      </Button>
+    </div>
+  );
 
   return (
     <div className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-elevation-1 hover:shadow-elevation-2 transition-all duration-300 border border-slate-200/80 hover:border-primary/40 hover:-translate-y-1">
@@ -92,30 +117,37 @@ export default function ProductCard({ product }) {
             </div>
           </div>
 
-          {/* Dual Action Buttons */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              as={Link}
-              to={`/product/${product.slug}`}
-              variant="secondary"
-              size="sm"
-              className="w-full text-center"
-            >
-              Detail
-            </Button>
-            <Button
-              as="a"
-              href={product.affiliate_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant={marketplaceVariant}
-              size="sm"
-              className="w-full text-center"
-              icon="open_in_new"
-              iconPosition="right"
-            >
-              {marketplaceLabel}
-            </Button>
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-2">
+            {availableButtons.length === 3 ? (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <ButtonRenderer btn={availableButtons[0]} />
+                  <ButtonRenderer btn={availableButtons[1]} />
+                </div>
+                <ButtonRenderer btn={availableButtons[2]} />
+              </>
+            ) : availableButtons.length === 2 ? (
+              <div className="grid grid-cols-2 gap-2">
+                <ButtonRenderer btn={availableButtons[0]} />
+                <ButtonRenderer btn={availableButtons[1]} />
+              </div>
+            ) : availableButtons.length === 1 ? (
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col justify-end">
+                  <Button as={Link} to={`/product/${product.slug}`} variant="secondary" size="sm" className="w-full text-center">
+                    Detail
+                  </Button>
+                </div>
+                <ButtonRenderer btn={availableButtons[0]} />
+              </div>
+            ) : (
+              <div className="flex flex-col justify-end">
+                <Button as={Link} to={`/product/${product.slug}`} variant="secondary" size="sm" className="w-full text-center">
+                  Lihat Detail Spesifikasi
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

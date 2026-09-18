@@ -20,8 +20,15 @@ export default function ProductFormModal({
     price: '',
     original_price: '',
     image: '',
-    affiliate_url: '',
-    marketplace_type: 'generic',
+    button1_url: '',
+    button1_text: 'Beli di TikTok',
+    button1_price: '',
+    button2_url: '',
+    button2_text: 'Beli di Shopee',
+    button2_price: '',
+    button3_url: '',
+    button3_text: 'Beli di Tokopedia',
+    button3_price: '',
     is_featured: false,
     status: 'ACTIVE',
     description: '',
@@ -40,8 +47,15 @@ export default function ProductFormModal({
         price: product.price !== undefined ? String(product.price) : '',
         original_price: product.original_price !== undefined ? String(product.original_price) : '',
         image: product.image || '',
-        affiliate_url: product.affiliate_url || '',
-        marketplace_type: product.marketplace_type || 'generic',
+        button1_url: product.button1_url || product.affiliate_url || '',
+        button1_text: product.button1_text || 'Beli di TikTok',
+        button1_price: product.button1_price !== undefined ? String(product.button1_price) : '',
+        button2_url: product.button2_url || '',
+        button2_text: product.button2_text || 'Beli di Shopee',
+        button2_price: product.button2_price !== undefined ? String(product.button2_price) : '',
+        button3_url: product.button3_url || '',
+        button3_text: product.button3_text || 'Beli di Tokopedia',
+        button3_price: product.button3_price !== undefined ? String(product.button3_price) : '',
         is_featured: Boolean(product.is_featured),
         status: product.status || 'ACTIVE',
         description: product.description || '',
@@ -62,8 +76,15 @@ export default function ProductFormModal({
         price: '',
         original_price: '',
         image: '',
-        affiliate_url: '',
-        marketplace_type: 'generic',
+        button1_url: '',
+        button1_text: 'Beli di TikTok',
+        button1_price: '',
+        button2_url: '',
+        button2_text: 'Beli di Shopee',
+        button2_price: '',
+        button3_url: '',
+        button3_text: 'Beli di Tokopedia',
+        button3_price: '',
         is_featured: false,
         status: 'ACTIVE',
         description: '',
@@ -118,10 +139,14 @@ export default function ProductFormModal({
     if (!formData.image.trim()) {
       errs.image = 'URL gambar produk wajib diisi.';
     }
-    if (!formData.affiliate_url.trim()) {
-      errs.affiliate_url = 'URL afiliasi wajib diisi.';
-    } else if (!formData.affiliate_url.startsWith('https://')) {
-      errs.affiliate_url = 'URL afiliasi harus menggunakan protokol HTTPS (https://...).';
+    if (formData.button1_url && !formData.button1_url.startsWith('https://') && !formData.button1_url.startsWith('http://')) {
+      errs.button1_url = 'URL Tombol 1 harus berupa link valid (http:// atau https://).';
+    }
+    if (formData.button2_url && !formData.button2_url.startsWith('https://') && !formData.button2_url.startsWith('http://')) {
+      errs.button2_url = 'URL Tombol 2 harus berupa link valid (http:// atau https://).';
+    }
+    if (formData.button3_url && !formData.button3_url.startsWith('https://') && !formData.button3_url.startsWith('http://')) {
+      errs.button3_url = 'URL Tombol 3 harus berupa link valid (http:// atau https://).';
     }
 
     setErrors(errs);
@@ -143,6 +168,9 @@ export default function ProductFormModal({
     const payload = {
       ...formData,
       price: Number(formData.price),
+      button1_price: formData.button1_price ? Number(formData.button1_price) : undefined,
+      button2_price: formData.button2_price ? Number(formData.button2_price) : undefined,
+      button3_price: formData.button3_price ? Number(formData.button3_price) : undefined,
       original_price: formData.original_price ? Number(formData.original_price) : undefined,
       specs: specsObj,
     };
@@ -155,12 +183,7 @@ export default function ProductFormModal({
     label: c.name,
   }));
 
-  const marketplaceOptions = [
-    { value: 'generic', label: 'Marketplace Umum' },
-    { value: 'shopee', label: 'Shopee Official Store' },
-    { value: 'tokopedia', label: 'Tokopedia Official Store' },
-    { value: 'tiktok', label: 'TikTok Shop' },
-  ];
+
 
   return (
     <Modal
@@ -206,13 +229,7 @@ export default function ProductFormModal({
             error={errors.category_id}
           />
 
-          <Select
-            label="Tipe Marketplace"
-            options={marketplaceOptions}
-            value={formData.marketplace_type}
-            onChange={(e) => setFormData({ ...formData, marketplace_type: e.target.value })}
-            helperText="Menyesuaikan warna dan ikon tombol outbound"
-          />
+
         </div>
 
         {/* Row 3: Price & Original Price */}
@@ -271,18 +288,92 @@ export default function ProductFormModal({
           )}
         </div>
 
-        {/* Row 5: Affiliate URL */}
-        <Input
-          label="URL Afiliasi Marketplace (HTTPS Wajib)"
-          type="url"
-          required
-          value={formData.affiliate_url}
-          onChange={(e) => setFormData({ ...formData, affiliate_url: e.target.value })}
-          error={errors.affiliate_url}
-          placeholder="https://shopee.co.id/... atau https://www.tokopedia.com/..."
-          icon="link"
-          helperText="Tautan tempat pengunjung akan diarahkan saat mengklik tombol Beli"
-        />
+        {/* Row 5: Button 1 (Optional) */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <Input
+            label="Teks Tombol 1 (Opsional)"
+            value={formData.button1_text}
+            onChange={(e) => setFormData({ ...formData, button1_text: e.target.value })}
+            placeholder="Beli di TikTok"
+          />
+          <div className="sm:col-span-2">
+            <Input
+              label="URL Tombol 1 (Opsional)"
+              type="url"
+              value={formData.button1_url}
+              onChange={(e) => setFormData({ ...formData, button1_url: e.target.value })}
+              error={errors.button1_url}
+              placeholder="https://tiktok.com/..."
+              icon="link"
+            />
+          </div>
+          <Input
+            label="Harga (Opsional)"
+            type="number"
+            min="0"
+            value={formData.button1_price}
+            onChange={(e) => setFormData({ ...formData, button1_price: e.target.value })}
+            placeholder="50000"
+          />
+        </div>
+
+        {/* Row 6: Button 2 (Optional) */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <Input
+            label="Teks Tombol 2 (Opsional)"
+            value={formData.button2_text}
+            onChange={(e) => setFormData({ ...formData, button2_text: e.target.value })}
+            placeholder="Beli di Shopee"
+          />
+          <div className="sm:col-span-2">
+            <Input
+              label="URL Tombol 2 (Opsional)"
+              type="url"
+              value={formData.button2_url}
+              onChange={(e) => setFormData({ ...formData, button2_url: e.target.value })}
+              error={errors.button2_url}
+              placeholder="https://shopee.co.id/..."
+              icon="link"
+            />
+          </div>
+          <Input
+            label="Harga (Opsional)"
+            type="number"
+            min="0"
+            value={formData.button2_price}
+            onChange={(e) => setFormData({ ...formData, button2_price: e.target.value })}
+            placeholder="55000"
+          />
+        </div>
+
+        {/* Row 6.5: Button 3 (Optional) */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <Input
+            label="Teks Tombol 3 (Opsional)"
+            value={formData.button3_text}
+            onChange={(e) => setFormData({ ...formData, button3_text: e.target.value })}
+            placeholder="Beli di Tokopedia"
+          />
+          <div className="sm:col-span-2">
+            <Input
+              label="URL Tombol 3 (Opsional)"
+              type="url"
+              value={formData.button3_url}
+              onChange={(e) => setFormData({ ...formData, button3_url: e.target.value })}
+              error={errors.button3_url}
+              placeholder="https://tokopedia.com/..."
+              icon="link"
+            />
+          </div>
+          <Input
+            label="Harga (Opsional)"
+            type="number"
+            min="0"
+            value={formData.button3_price}
+            onChange={(e) => setFormData({ ...formData, button3_price: e.target.value })}
+            placeholder="52000"
+          />
+        </div>
 
         {/* Row 6: Description */}
         <Textarea

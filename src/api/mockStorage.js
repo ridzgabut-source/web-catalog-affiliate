@@ -209,9 +209,9 @@ class MockStorage {
     let products = JSON.parse(localStorage.getItem(STORAGE_KEYS.PRODUCTS) || '[]');
 
     // Public view only sees ACTIVE products
-    if (status) {
+    if (status && status !== 'ALL') {
       products = products.filter(p => p.status === status);
-    } else {
+    } else if (!status) {
       products = products.filter(p => p.status === 'ACTIVE');
     }
 
@@ -308,10 +308,9 @@ class MockStorage {
     if (!productData.name) errors.name = ['Nama produk wajib diisi.'];
     if (!productData.category_id) errors.category_id = ['Kategori wajib dipilih.'];
     if (productData.price === undefined || productData.price === null || productData.price < 0) {
-      errors.price = ['Harga harus berupa angka valid minimal 0.'];
+      errors.price = ['Harga utama harus berupa angka valid minimal 0.'];
     }
     if (!productData.image) errors.image = ['URL gambar produk wajib diisi.'];
-    if (!productData.affiliate_url) errors.affiliate_url = ['URL afiliasi wajib diisi.'];
 
     if (Object.keys(errors).length > 0) {
       return {
@@ -327,13 +326,6 @@ class MockStorage {
 
     const slug = productData.slug || productData.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-    // Determine marketplace type from affiliate url if not explicitly set
-    let marketplaceType = productData.marketplace_type || 'generic';
-    const urlLower = (productData.affiliate_url || '').toLowerCase();
-    if (urlLower.includes('shopee')) marketplaceType = 'shopee';
-    else if (urlLower.includes('tokopedia')) marketplaceType = 'tokopedia';
-    else if (urlLower.includes('tiktok')) marketplaceType = 'tiktok';
-
     const newProduct = {
       id: `prod-${Date.now()}`,
       name: productData.name.trim(),
@@ -344,8 +336,15 @@ class MockStorage {
       price: Number(productData.price),
       original_price: productData.original_price ? Number(productData.original_price) : undefined,
       image: productData.image,
-      affiliate_url: productData.affiliate_url,
-      marketplace_type: marketplaceType,
+      button1_url: productData.button1_url || '',
+      button1_text: productData.button1_text || 'Beli di TikTok',
+      button1_price: productData.button1_price ? Number(productData.button1_price) : undefined,
+      button2_url: productData.button2_url || '',
+      button2_text: productData.button2_text || '',
+      button2_price: productData.button2_price ? Number(productData.button2_price) : undefined,
+      button3_url: productData.button3_url || '',
+      button3_text: productData.button3_text || '',
+      button3_price: productData.button3_price ? Number(productData.button3_price) : undefined,
       is_featured: Boolean(productData.is_featured),
       status: productData.status || 'ACTIVE',
       specs: productData.specs || {},
@@ -384,20 +383,14 @@ class MockStorage {
       if (cat) categoryName = cat.name;
     }
 
-    let marketplaceType = productData.marketplace_type || products[index].marketplace_type || 'generic';
-    if (productData.affiliate_url) {
-      const urlLower = productData.affiliate_url.toLowerCase();
-      if (urlLower.includes('shopee')) marketplaceType = 'shopee';
-      else if (urlLower.includes('tokopedia')) marketplaceType = 'tokopedia';
-      else if (urlLower.includes('tiktok')) marketplaceType = 'tiktok';
-    }
-
     const updated = {
       ...products[index],
       ...productData,
       category_name: categoryName,
-      marketplace_type: marketplaceType,
       price: productData.price !== undefined ? Number(productData.price) : products[index].price,
+      button1_price: productData.button1_price !== undefined ? (productData.button1_price ? Number(productData.button1_price) : undefined) : products[index].button1_price,
+      button2_price: productData.button2_price !== undefined ? (productData.button2_price ? Number(productData.button2_price) : undefined) : products[index].button2_price,
+      button3_price: productData.button3_price !== undefined ? (productData.button3_price ? Number(productData.button3_price) : undefined) : products[index].button3_price,
       original_price: productData.original_price !== undefined 
         ? (productData.original_price ? Number(productData.original_price) : undefined)
         : products[index].original_price,

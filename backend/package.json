@@ -1,0 +1,35 @@
+{
+  "name": "koleksikita-backend",
+  "version": "1.0.0",
+  "description": "REST API Backend for KoleksiKita Affiliate Product Catalog",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && nodemon server.js",
+    "start": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && node server.js",
+    "db:migrate": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && knex migrate:latest --knexfile src/database/knexfile.js",
+    "db:rollback": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && knex migrate:rollback --knexfile src/database/knexfile.js",
+    "db:seed": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && knex seed:run --knexfile src/database/knexfile.js",
+    "db:reset": "set PATH=%CD%\\.node\\node-v22.14.0-win-x64;%PATH% && knex migrate:rollback --all --knexfile src/database/knexfile.js && knex migrate:latest --knexfile src/database/knexfile.js && knex seed:run --knexfile src/database/knexfile.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.3.0",
+    "joi": "^17.13.8",
+    "jsonwebtoken": "^9.0.3",
+    "knex": "^3.3.0",
+    "sqlite3": "^5.1.7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -22,6 +22,13 @@ export default function CatalogPage() {
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const featuredParam = searchParams.get('featured') === 'true';
 
+  // State
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({ total: 0, page: 1, per_page: 6, total_pages: 1 });
+  const [loading, setLoading] = useState(true);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
   // Dynamic document meta based on active filter
   const currentCategoryName = categories.find((c) => c.slug === categoryParam || c.id === categoryParam)?.name;
   useDocumentMeta({
@@ -33,13 +40,6 @@ export default function CatalogPage() {
     description: 'Jelajahi seluruh katalog produk pilihan, filter berdasarkan kategori dan harga terbaik dari Shopee & Tokopedia.',
     image: '/images/og/og-koleksikita.webp',
   });
-
-  // State
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [pagination, setPagination] = useState({ total: 0, page: 1, per_page: 6, total_pages: 1 });
-  const [loading, setLoading] = useState(true);
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   // Fetch categories once
   useEffect(() => {

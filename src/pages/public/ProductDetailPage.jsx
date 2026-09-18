@@ -99,17 +99,42 @@ export default function ProductDetailPage() {
     ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
     : 0;
 
-  const marketplaceLabel = product.marketplace_type === 'shopee'
-    ? 'Beli di Shopee'
-    : product.marketplace_type === 'tokopedia'
-    ? 'Beli di Tokopedia'
-    : 'Beli di Marketplace Resmi';
+  const getVariant = (text) => {
+    const t = text ? text.toLowerCase() : '';
+    if (t.includes('shopee')) return 'shopee';
+    if (t.includes('tokopedia')) return 'tokopedia';
+    return 'primary';
+  };
 
-  const marketplaceVariant = product.marketplace_type === 'shopee'
-    ? 'shopee'
-    : product.marketplace_type === 'tokopedia'
-    ? 'tokopedia'
-    : 'primary';
+  const btn1Variant = getVariant(product.button1_text);
+  const btn2Variant = getVariant(product.button2_text);
+  const btn3Variant = getVariant(product.button3_text);
+
+  const availableButtons = [];
+  if (product.button1_url) availableButtons.push({ url: product.button1_url, text: product.button1_text, price: product.button1_price, variant: btn1Variant });
+  if (product.button2_url) availableButtons.push({ url: product.button2_url, text: product.button2_text, price: product.button2_price, variant: btn2Variant });
+  if (product.button3_url) availableButtons.push({ url: product.button3_url, text: product.button3_text, price: product.button3_price, variant: btn3Variant });
+
+  const ButtonRenderer = ({ btn, isFullWidth = false }) => (
+    <div className={`flex flex-col justify-end gap-1.5 ${isFullWidth ? 'sm:col-span-2' : ''}`}>
+      {btn.price && (
+        <span className="text-xs font-bold text-slate-500 text-center truncate">{formatRupiah(btn.price)}</span>
+      )}
+      <Button
+        as="a"
+        href={btn.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        variant={btn.variant}
+        size="lg"
+        className="w-full text-center shadow-md hover:shadow-lg"
+        icon="open_in_new"
+        iconPosition="right"
+      >
+        {btn.text || 'Beli'}
+      </Button>
+    </div>
+  );
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-28 sm:pb-16 space-y-12">
@@ -186,19 +211,24 @@ export default function ProductDetailPage() {
 
           {/* Primary Outbound Action Buttons (Desktop & Tablet) */}
           <div className="space-y-3 pt-2">
-            <Button
-              as="a"
-              href={product.affiliate_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant={marketplaceVariant}
-              size="lg"
-              className="w-full text-center shadow-md hover:shadow-lg"
-              icon="open_in_new"
-              iconPosition="right"
-            >
-              {marketplaceLabel}
-            </Button>
+            {availableButtons.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {availableButtons.length === 3 ? (
+                  <>
+                    <ButtonRenderer btn={availableButtons[0]} />
+                    <ButtonRenderer btn={availableButtons[1]} />
+                    <ButtonRenderer btn={availableButtons[2]} isFullWidth={true} />
+                  </>
+                ) : availableButtons.length === 2 ? (
+                  <>
+                    <ButtonRenderer btn={availableButtons[0]} />
+                    <ButtonRenderer btn={availableButtons[1]} />
+                  </>
+                ) : (
+                  <ButtonRenderer btn={availableButtons[0]} isFullWidth={true} />
+                )}
+              </div>
+            )}
             <p className="text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
               <span>Anda diarahkan langsung ke toko resmi terverifikasi</span>

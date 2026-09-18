@@ -93,17 +93,7 @@ export default function PublicHeader() {
             />
           </form>
 
-          {/* Admin Login / Dashboard Shortcut */}
-          <Link
-            to={isAuthenticated ? '/admin' : '/admin/login'}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold font-headline bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
-            title="Kelola Katalog"
-          >
-            <span className="material-symbols-outlined text-[16px]">
-              {isAuthenticated ? 'dashboard' : 'admin_panel_settings'}
-            </span>
-            <span>{isAuthenticated ? 'Admin Panel' : 'Masuk Admin'}</span>
-          </Link>
+          {/* Admin link removed */}
 
           {/* Mobile Menu Toggle Button */}
           <button
@@ -168,14 +158,7 @@ export default function PublicHeader() {
             >
               Rekomendasi Pilihan
             </Link>
-            <Link
-              to={isAuthenticated ? '/admin' : '/admin/login'}
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2.5 rounded-xl text-sm font-headline text-slate-700 hover:bg-slate-50 flex items-center justify-between"
-            >
-              <span>{isAuthenticated ? 'Admin Panel' : 'Masuk Admin'}</span>
-              <span className="material-symbols-outlined text-[18px] text-slate-400">arrow_forward</span>
-            </Link>
+            {/* Admin link removed */}
           </nav>
         </div>
       )}

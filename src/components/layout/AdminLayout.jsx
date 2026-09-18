@@ -3,7 +3,6 @@ import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminSidebar from './AdminSidebar.jsx';
 import AdminHeader from './AdminHeader.jsx';
-import DevToolbar from './DevToolbar.jsx';
 
 export default function AdminLayout() {
   const { isAuthenticated, loading } = useAuth();
@@ -60,8 +59,6 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
-
-      <DevToolbar />
     </div>
   );
 }

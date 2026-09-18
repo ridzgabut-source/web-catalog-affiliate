@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment variables — JANGAN commit file ini!
+.env
+
+# SQLite database file
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

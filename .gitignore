@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment Variables
+.env
+.env.*
+
+# Project Documents
+BACKEND_DOCS.md
+FE_HANDOFF.md
+PRD*.md

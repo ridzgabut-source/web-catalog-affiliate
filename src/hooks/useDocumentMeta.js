@@ -22,8 +22,15 @@ export function useDocumentMeta({
       let element = document.querySelector(selector);
       if (!element) {
         element = document.createElement('meta');
-        const [attr, val] = selector.replace(/[\[\]"]/g, '').split('=');
-        element.setAttribute(attr, val);
+        
+        // Safely extract attribute and value from selector like 'meta[property="og:title"]'
+        const splitIndex = selector.indexOf('=');
+        if (splitIndex !== -1) {
+          const attr = selector.substring(0, splitIndex).replace(/meta\[/, '').trim();
+          const val = selector.substring(splitIndex + 1).replace(/[\]"]/g, '').trim();
+          element.setAttribute(attr, val);
+        }
+        
         document.head.appendChild(element);
       }
       element.setAttribute(attributeName, content);

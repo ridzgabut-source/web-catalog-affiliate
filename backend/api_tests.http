@@ -1,0 +1,74 @@
+### KOLEKSIKITA API TESTS
+### Membutuhkan extension "REST Client" di VS Code untuk menjalankannya.
+### Atau bisa di-import ke Postman / ThunderClient.
+
+@baseUrl = http://localhost:3001/api/v1
+# Ganti dengan token yang didapat setelah login
+@token = paste_your_token_here
+
+### ----------------------------------------------------
+### 1. PUBLIC ENDPOINTS (Tanpa Auth)
+### ----------------------------------------------------
+
+### Cek Kesehatan Server
+GET http://localhost:3001/health
+
+### Get Semua Kategori Aktif
+GET {{baseUrl}}/categories
+
+### Get Kategori Spesifik (Slug)
+GET {{baseUrl}}/categories/sepatu-sneakers
+
+### Get Semua Produk (Dengan pagination & pencarian)
+GET {{baseUrl}}/products?page=1&per_page=10&search=Nike&sort=newest
+
+### Get Semua Produk Unggulan (Featured)
+GET {{baseUrl}}/products?featured=true
+
+### ----------------------------------------------------
+### 2. AUTHENTICATION
+### ----------------------------------------------------
+
+### Login Admin
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@koleksikita.com",
+  "password": "password123"
+}
+
+### Cek Data Diri
+# Cookie akan otomatis dikirim jika menggunakan REST Client yang mendukung cookie jar
+GET {{baseUrl}}/auth/me
+
+### Logout
+POST {{baseUrl}}/auth/logout
+
+### ----------------------------------------------------
+### 3. ADMIN ENDPOINTS (Wajib Cookie Aktif)
+### ----------------------------------------------------
+
+### Buat Kategori Baru
+POST {{baseUrl}}/admin/categories
+Content-Type: application/json
+
+{
+  "name": "Aksesoris Tambahan",
+  "status": "ACTIVE"
+}
+
+### Buat Produk Baru
+POST {{baseUrl}}/admin/products
+Content-Type: application/json
+
+{
+  "name": "Kacamata Hitam Anti Silau",
+  "category_id": "c1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c", 
+  "price": 150000,
+  "image": "https://example.com/image.jpg",
+  "affiliate_url": "https://shopee.co.id/product",
+  "marketplace_type": "shopee",
+  "status": "ACTIVE"
+}
